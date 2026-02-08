@@ -43,19 +43,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add active state to current section
+    let cachedNavHeight = document.querySelector('.navigation-bar').offsetHeight;
+    
+    // Update cached nav height on resize
+    window.addEventListener('resize', function() {
+        cachedNavHeight = document.querySelector('.navigation-bar').offsetHeight;
+    });
+    
     function setActiveLink() {
         const sections = document.querySelectorAll('.section');
-        const navHeight = document.querySelector('.navigation-bar').offsetHeight;
+        const scrollPosition = window.scrollY;
         
         sections.forEach(section => {
-            const sectionTop = section.offsetTop - navHeight - 10;
+            const sectionTop = section.offsetTop - cachedNavHeight - 10;
             const sectionBottom = sectionTop + section.offsetHeight;
-            const scrollPosition = window.scrollY;
             
             if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
                 const sectionId = section.getAttribute('id');
                 navLinks.forEach(link => {
-                    link.classList.remove('active');
                     if (link.getAttribute('href') === `#${sectionId}`) {
                         link.style.background = 'rgba(255, 255, 255, 0.2)';
                     } else {
